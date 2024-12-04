@@ -56,7 +56,7 @@ COPY --from=builder /app/characters ./characters
 
 # Copy the startup script
 COPY scripts/prod-startup.sh ./
-RUN chmod +x startup.sh
+RUN chmod +x prod-startup.sh
 
-CMD ["./startup.sh"]
+CMD ["./prod-startup.sh"]
 

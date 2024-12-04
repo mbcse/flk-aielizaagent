@@ -19,8 +19,8 @@ services:
         deploy:
             resources:
                 limits:
-                    memory: "3G" # Leave 200MB for system
-                    cpus: "1.8" # Leave some CPU for system
+                    memory: "3G"
+                    cpus: "1.8"
 
 volumes:
     tee:
