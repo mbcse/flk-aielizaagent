@@ -1,6 +1,6 @@
 services:
     tee:
-        command: ["sh", "-c", "pnpm start --character=/app/characters/fleek.character.json & pnpm start:client & wait"]
+        command: ["sh", "-c", "pnpm start --character=/app/characters/fleek.character.json"]
         build:
             context: .
             dockerfile: Dockerfile
