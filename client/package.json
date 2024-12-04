@@ -8,7 +8,8 @@
         "build": "vite build",
         "check-types": "tsc --noEmit",
         "lint": "eslint .",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "start": "pnpm build && pnpm preview"
     },
     "dependencies": {
         "@ai16z/eliza": "workspace:*",

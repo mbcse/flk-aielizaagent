@@ -52,4 +52,11 @@ COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/characters ./characters
 
 # Set the command to run the application
-CMD ["pnpm", "start", "--non-interactive"]
+# CMD ["pnpm", "start", "--non-interactive"]
+
+# Copy the startup script
+COPY scripts/prod-startup.sh ./
+RUN chmod +x startup.sh
+
+CMD ["./startup.sh"]
+
