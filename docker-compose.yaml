@@ -1,6 +1,6 @@
 services:
     tee:
-        command: ["sh", "-c", "pnpm start & pnpm client start & wait"]
+        command: ["sh", "-c", "pnpm start --character=/app/characters/fleek.character.json & pnpm start:client & wait"]
         build:
             context: .
             dockerfile: Dockerfile
@@ -10,7 +10,7 @@ services:
             - /var/run/tappd.sock:/var/run/tappd.sock
             - tee:/app/packages/client-twitter/src/tweetcache
             - tee:/app/db.sqlite
-        environment:
+        env_file:
             - .env
         ports:
             - "4173:80"
