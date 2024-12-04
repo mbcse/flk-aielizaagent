@@ -2,7 +2,7 @@
 # startup.sh
 
 # Start both services
-pnpm start &
+pnpm start --character="characters/fleek.character.json"&
 pnpm client:start &
 
 # Wait for any process to exit
