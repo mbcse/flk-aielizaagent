@@ -25,9 +25,10 @@ COPY characters ./characters
 COPY client ./client
 
 # Install dependencies and build the project
-RUN pnpm install \
-    && pnpm build \
-    && pnpm prune --prod
+RUN pnpm install
+
+RUN pnpm build \
+&& pnpm prune --prod
 
 # Create a new stage for the final image
 FROM --platform=linux/amd64 node:23.3.0-slim
