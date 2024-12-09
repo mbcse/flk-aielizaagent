@@ -53,6 +53,50 @@ export const wait = (minTime: number = 1000, maxTime: number = 3000) => {
     return new Promise((resolve) => setTimeout(resolve, waitTime));
 };
 
+interface PostgresConfig {
+    host: string;
+    port: number;
+    database: string;
+    user: string;
+    password: string;
+    ssl: { rejectUnauthorized: false } | false;
+}
+
+function parsePostgresUrl(url: string): PostgresConfig {
+    try {
+        // Create URL object to handle parsing
+        const dbUrl = new URL(url);
+
+        // Remove leading slash from pathname to get database name
+        const database = dbUrl.pathname.replace("/", "");
+
+        // Split username:password from auth
+        const [user = "", password = ""] = (
+            dbUrl.username
+                ? decodeURIComponent(dbUrl.username) +
+                  ":" +
+                  decodeURIComponent(dbUrl.password)
+                : ":"
+        ).split(":");
+
+        return {
+            host: dbUrl.hostname,
+            port: parseInt(dbUrl.port) || 5432, // Default to 5432 if no port specified
+            database,
+            user,
+            password,
+            ssl:
+                dbUrl.searchParams.get("sslmode") === "require"
+                    ? { rejectUnauthorized: false }
+                    : false,
+        };
+    } catch (error) {
+        throw new Error(
+            `Invalid PostgreSQL URL: ${error instanceof Error ? error.message : "Unknown error"}`
+        );
+    }
+}
+
 export function parseArguments(): {
     character?: string;
     characters?: string;
@@ -270,8 +314,9 @@ function initializeDatabase(dataDir: string) {
     if (process.env.POSTGRES_URL) {
         elizaLogger.info("Initializing PostgreSQL connection...");
         const db = new PostgresDatabaseAdapter({
-            connectionString: process.env.POSTGRES_URL,
+            ...parsePostgresUrl(process.env.POSTGRES_URL as string),
             parseInputs: true,
+            ssl: true,
         });
 
         // Test the connection
